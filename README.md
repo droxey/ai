@@ -10,7 +10,7 @@ Built for a Go + Python + Docker stack. Node included as last-resort coverage fo
 
 ## ⚠️ Warning: Use at Your Own Risk
 
-> **You are responsible for the actions taken by agents operating under your configuration.** Review all settings before deploying. Never run `--dangerously-skip-permissions` outside a sandboxed container. Never grant agents access to production credentials, secrets, or irreversible operations without human review. See [PLAN.md](PLAN.md) for the full autonomy strategy and risk model.
+> **You are responsible for the actions taken by agents operating under your configuration.** Review all settings before deploying. *Never* run `--dangerously-skip-permissions` outside a sandboxed container. *Never* grant agents access to **production credentials**, **secrets**, or **irreversible operations** without human review. See [PLAN.md](PLAN.md) for the full autonomy strategy and risk model.
 
 ---
 
