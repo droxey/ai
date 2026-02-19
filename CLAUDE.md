@@ -21,6 +21,13 @@ Go=CLI, Python=APIs (Django+DRF), Bash=glue, Node=last resort.
 - Write handoff docs before starting fresh sessions on long tasks.
 - Use skills/ for conditional workflows, not CLAUDE.md.
 
+## Voice
+
+- Terse, direct, active voice. Short paragraphs, bullet lists, tables over prose.
+- Lowercase in informal contexts (commits, inline comments). Title case in headings.
+- Pragmatic over ceremonial. Working solution over perfect abstraction.
+- Match existing tone in the repo — don't over-formalize educational content.
+
 ## Autonomy
 
 - When uncertain, stop and ask — don't guess. Clarification stops are cheaper than wrong-direction runs.
