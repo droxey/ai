@@ -8,9 +8,9 @@ Modular, token-efficient configuration files for LLM-powered development tools. 
 
 Built for a Go + Python + Docker stack. Node included as last-resort coverage for hook scripts and build tooling.
 
-## Terms of Use
+## ⚠️ Warning: Use at Your Own Risk
 
-These configurations control AI agent behavior including progressive autonomy tiers, auto-approved tool permissions, and containerized unattended execution. Review all settings before deploying. You are responsible for the actions taken by agents operating under your configuration. Never run `--dangerously-skip-permissions` outside a sandboxed container. Never grant agents access to production credentials, secrets, or irreversible operations without human review. See [PLAN.md](PLAN.md) for the full autonomy strategy and risk model.
+> **You are responsible for the actions taken by agents operating under your configuration.** Review all settings before deploying. Never run `--dangerously-skip-permissions` outside a sandboxed container. Never grant agents access to production credentials, secrets, or irreversible operations without human review. See [PLAN.md](PLAN.md) for the full autonomy strategy and risk model.
 
 ---
 
@@ -169,4 +169,4 @@ This configuration draws from three primary sources:
 
 - **[everything-claude-code](https://github.com/affaan-m/everything-claude-code)** -- Modular rules, skills, and hooks collection. Cherry-picked and adapted for Go/Python/Docker stack; TypeScript/frontend content adapted into lean Node rules for hook scripts only.
 - **[Anthropic: Measuring AI Agent Autonomy](https://anthropic.com/research/measuring-agent-autonomy)** -- Research on progressive trust tiers, interrupt patterns, and effective oversight strategies.
-- **PRISM** -- Internal identity and prioritization framework (Accuracy > Goals > Efficiency > Style).
+- **[PRISM](https://github.com/droxey/prompts)** -- Identity and prioritization framework (Accuracy > Goals > Efficiency > Style).
