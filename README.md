@@ -136,6 +136,7 @@ rules/                             # Layer 2: Auto-loaded rules (~2,500 tokens)
     git-workflow.md                #   Conventional commits, draft PRs
     testing.md                     #   TDD, coverage, deterministic tests
     docker.md                      #   Compose, Swarm, CapRover
+    markdown.md                    #   Markdown, Docsify conventions
   golang/
     coding-style.md                #   Effective Go, error wrapping, slog
     testing.md                     #   Table-driven tests, testcontainers
@@ -159,14 +160,18 @@ skills/                            # Layer 3: On-demand skills (0 tokens until i
     skill.md                       #     When and how to compact
     suggest-compact.js             #     Hook script for edit tracking
   deployment-patterns/skill.md     #   Swarm, CI/CD, zero-downtime deploy
+  course-content/skill.md          #   Lesson plans, Docsify, autograders
+  caprover-patterns/skill.md       #   CapRover one-click apps, deploys
 templates/                         # Layer 6: Project-level CLAUDE.md templates
   go-cli.md                        #   Go CLI project template
   django-drf.md                    #   Django+DRF API template
   docker-devops.md                 #   Infrastructure project template
+  course-repo.md                   #   ACS course repository template
 contexts/                          # Layer 7: Mode-specific system prompts
   dev.md                           #   Development focus
   review.md                        #   Code review focus
   security.md                      #   Security audit focus
+  teach.md                         #   Educational content creation
 ```
 
 ---
@@ -208,6 +213,7 @@ alias cc='claude -c'
 alias cdev='claude --system-prompt "$(cat ~/.claude/contexts/dev.md)"'
 alias creview='claude --system-prompt "$(cat ~/.claude/contexts/review.md)"'
 alias csec='claude --system-prompt "$(cat ~/.claude/contexts/security.md)"'
+alias cteach='claude --system-prompt "$(cat ~/.claude/contexts/teach.md)"'
 
 # Container autonomy (Tier 3 -- sandboxed, never on host)
 alias cdanger='docker exec -it claude-sandbox claude --dangerously-skip-permissions'
@@ -222,10 +228,10 @@ Total 200k context window allocation with all rules loaded:
 | Component | Tokens | % |
 |-----------|--------|---|
 | System prompt | ~10,000 | 5% |
-| Global CLAUDE.md | ~450 | 0.2% |
-| Rules (all loaded) | ~2,500 | 1.25% |
-| **Static overhead** | **~12,950** | **~6.5%** |
-| **Available for work** | **~142,050** | **~71%** |
+| Global CLAUDE.md | ~550 | 0.3% |
+| Rules (all loaded) | ~2,700 | 1.35% |
+| **Static overhead** | **~13,250** | **~6.6%** |
+| **Available for work** | **~141,750** | **~71%** |
 | Auto-compact reserve | ~45,000 | ~22.5% |
 
 Skills load on demand and cost 0 tokens until invoked. Compare to loading a monolithic config: easily 8-10k tokens of static overhead before you type anything.
