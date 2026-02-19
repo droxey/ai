@@ -16,6 +16,7 @@ Built for a Go + Python + Docker stack. Node included as last-resort coverage fo
 
 ## Table of Contents
 
+- [Quick Start](#quick-start)
 - [Customization](#customization)
 - [Overview](#overview)
 - [Structure](#structure)
@@ -23,6 +24,74 @@ Built for a Go + Python + Docker stack. Node included as last-resort coverage fo
 - [Shell Aliases](#shell-aliases)
 - [Token Budget](#token-budget)
 - [Sources](#sources)
+
+---
+
+## Quick Start
+
+### 1. Install (one time)
+
+Clone the repo and symlink everything into Claude Code's global config directory:
+
+```bash
+git clone https://github.com/droxey/ai.git ~/ai
+
+ln -sf ~/ai/CLAUDE.md ~/.claude/CLAUDE.md
+ln -sf ~/ai/settings.json ~/.claude/settings.json
+ln -sf ~/ai/rules ~/.claude/rules
+ln -sf ~/ai/skills ~/.claude/skills
+ln -sf ~/ai/contexts ~/.claude/contexts
+```
+
+All rules, skills, hooks, and settings now apply to every Claude Code session on this machine.
+
+### 2. Add to a new project
+
+Copy a template into the project root and fill in the placeholders:
+
+```bash
+# Pick the template that matches your stack
+cp ~/ai/templates/go-cli.md /path/to/project/CLAUDE.md
+cp ~/ai/templates/django-drf.md /path/to/project/CLAUDE.md
+cp ~/ai/templates/docker-devops.md /path/to/project/CLAUDE.md
+```
+
+Open the new `CLAUDE.md` and replace `[name]` with the project name. Add any project-specific build commands, structure notes, or constraints. Commit it to the repo so the whole team gets the same Claude behavior.
+
+### 3. Add to an existing project
+
+Create a `CLAUDE.md` at the project root. Start from a template or write a minimal one:
+
+```markdown
+# Project: myapp
+
+Django REST API with Celery workers.
+
+## Build & Test
+docker compose up -d
+pytest --cov=apps -x
+ruff check . && ruff format --check .
+
+## Notes
+- Auth via JWT (SimpleJWT). Tokens rotate every 15 min.
+- Background jobs in apps/tasks/. Always idempotent.
+```
+
+Claude reads project-level `CLAUDE.md` files automatically. The global rules from `~/ai/rules/` still apply; the project file adds context specific to that codebase.
+
+### 4. Launch
+
+```bash
+# Default session (global config applies automatically)
+claude
+
+# Mode-specific sessions (optional -- see Shell Aliases below)
+claude --system-prompt "$(cat ~/.claude/contexts/dev.md)"
+claude --system-prompt "$(cat ~/.claude/contexts/review.md)"
+claude --system-prompt "$(cat ~/.claude/contexts/security.md)"
+```
+
+That's it. Global rules and skills load automatically. Skills activate on demand when Claude needs them. Hooks run in the background. Per-project `CLAUDE.md` files layer on top without conflicting.
 
 ---
 
