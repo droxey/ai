@@ -16,7 +16,7 @@ Your 200k context budget breaks down roughly as:
 | ---------------------------- | ------------------ | ---------- |
 | System prompt + tools        | ~18k (10k patched) | 5-9%       |
 | CLAUDE.md (global + project) | Target ≤2k         | ~1%        |
-| Rules (auto-loaded)          | Target ≤3k         | ~1.5%      |
+| Rules (auto-loaded)          | Target ≤3k (~2.5k) | ~1.25%     |
 | Skills (on-demand)           | 0 until invoked    | 0%         |
 | Auto-compact reserve         | 45k                | 22.5%      |
 | **Usable working context**   | **~130-145k**      | **65-72%** |
@@ -73,13 +73,17 @@ Rules auto-load per session. Organize into common + language-specific. Only inst
 ├── common/
 │   ├── security.md        # From everything-cc, trimmed
 │   ├── git-workflow.md    # Conventional commits, draft PRs
-│   └── testing.md         # TDD cycle, coverage targets
+│   ├── testing.md         # TDD cycle, coverage targets
+│   └── docker.md          # Compose, Swarm, CapRover
 ├── golang/
 │   ├── coding-style.md    # Effective Go, error wrapping, no init()
 │   └── testing.md         # Table-driven tests, testcontainers
-└── python/
-    ├── coding-style.md    # Type hints, ruff, pathlib
-    └── testing.md         # pytest, Factory Boy, DRF test patterns
+├── python/
+│   ├── coding-style.md    # Type hints, ruff, pathlib
+│   └── testing.md         # pytest, Factory Boy, DRF test patterns
+└── node/
+    ├── coding-style.md    # ES modules, async/await, zod, last-resort rules
+    └── testing.md         # vitest, msw, hook script testing
 ```
 
 ### What to Install From Everything-CC
@@ -98,7 +102,7 @@ Cherry-pick these files from the repo's `rules/` directory:
 | `common/hooks.md`        | **Skip**        | Reference material, not a rule                                      |
 | `golang/*`               | Install both    | Directly relevant to your Go CLI work                               |
 | `python/*`               | Install both    | Directly relevant to Django+DRF APIs                                |
-| `typescript/*`           | **Skip**        | Node is last resort per PRISM                                       |
+| `typescript/*`           | **Adapt**       | Node is last resort, but hooks and build tooling use it. Cherry-pick TS rules into lean `node/` rules adapted for our hook-script and build-tool use cases. Skip frontend/React patterns. |
 
 ### What to Write Yourself
 
@@ -125,7 +129,8 @@ One small rule file for your Docker/DevOps context:
 | common/docker.md       | ~150       |
 | golang/ (2 files)      | ~500       |
 | python/ (2 files)      | ~500       |
-| **Total**              | **~2,100** |
+| node/ (2 files)        | ~400       |
+| **Total**              | **~2,500** |
 
 -----
 
@@ -147,6 +152,7 @@ Skills load on-demand. This is where you put the heavy reference material. From 
 | `django-security/`     | everything-cc | CSRF, auth, injection prevention           |
 | `strategic-compact/`   | everything-cc | Proactive compaction reminders             |
 | `deployment-patterns/` | everything-cc | Docker Swarm, CI/CD patterns               |
+| `node-patterns/`       | Custom        | Hook scripts, CLI tooling, process mgmt    |
 
 ### Nice-to-Have Skills
 
@@ -159,7 +165,7 @@ Skills load on-demand. This is where you put the heavy reference material. From 
 
 ### Skip These
 
-Everything TypeScript, Java, Spring Boot, C++, Swift, JPA, frontend-patterns — not your stack.
+Java, Spring Boot, C++, Swift, JPA, frontend-patterns (React/Next.js) — not your stack. TypeScript rules are adapted into lean `node/` rules for hook scripts and build tooling only; the frontend-heavy patterns from everything-cc are skipped.
 
 -----
 
@@ -441,9 +447,9 @@ Output: findings table with severity, location, recommendation.
 | ------------------------- | ------------------ |
 | System prompt (patched)   | ~10,000            |
 | Global CLAUDE.md          | ~450               |
-| Rules (all loaded)        | ~2,100             |
-| **Total static overhead** | **~12,550**        |
-| **Remaining for work**    | **~142,450 (71%)** |
+| Rules (all loaded)        | ~2,500             |
+| **Total static overhead** | **~12,950**        |
+| **Remaining for work**    | **~142,050 (71%)** |
 
 Compare to loading everything-cc's full user-CLAUDE.md + all rules + all agents: easily 8-10k tokens before you type anything. This plan saves ~5-7k tokens of static overhead.
 
@@ -454,8 +460,8 @@ Compare to loading everything-cc's full user-CLAUDE.md + all rules + all agents:
 1. **Don't gate every action.** The research is clear: requiring approval on every tool call creates friction without proportional safety gains. Use `allowedTools` for progressive trust, reserving manual approval for writes and bash in unfamiliar repos.
 1. **Don't run `--dangerously-skip-permissions` outside containers.** The 99.9th percentile autonomous turn is 45+ minutes. That's a lot of unsupervised action on a host machine with real credentials.
 1. **Don't install subagents until you need orchestration.** They add token overhead per delegation. Start without them; add planner and security-reviewer when multi-step workflows demand it.
-1. **Don't install the everything-cc plugin as a whole.** It bundles TypeScript hooks, Node-centric patterns, and agents you won't use. Cherry-pick files instead.
+1. **Don't install the everything-cc plugin as a whole.** It bundles TypeScript hooks, React/frontend patterns, and agents you won't use. Cherry-pick files instead. Node/TS rules have been adapted into lean `node/` rules for hook scripts and build tooling — the frontend-heavy content is dropped.
 1. **Don't put code examples in rules.** Put them in skills. Rules say *what*; skills say *how*.
 1. **Don't enable MCPs you use less than weekly.** Configure them all, enable per-project.
 1. **Don't suppress Claude's clarification stops.** They're a feature, not friction. On complex tasks Claude self-limits more than humans interrupt — that calibration is load-bearing for safety. If Claude is stopping too often, improve your CLAUDE.md context rather than telling it to "just do it."
-1. **Don't use the everything-cc hooks.json verbatim.** It's TypeScript-centric (prettier, tsc). Adapt for Go/Python tooling.
+1. **Don't use the everything-cc hooks.json verbatim.** It's TypeScript-centric (prettier, tsc, console.log warnings). Adapt for Go/Python tooling. The hooks in this repo use Node for JSON processing (where Bash would be fragile) but skip the TS-specific linting/formatting hooks.
