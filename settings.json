@@ -1,0 +1,56 @@
+{
+  "env": {
+    "DISABLE_AUTOUPDATER": "1",
+    "ENABLE_TOOL_SEARCH": "true"
+  },
+  "preferences": {
+    "autoCompact": false
+  },
+  "permissions": {
+    "allowedTools": [
+      "Read",
+      "Grep",
+      "Glob",
+      "LS",
+      "WebFetch",
+      "TodoRead",
+      "TodoWrite"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node -e \"let d='';process.stdin.on('data',c=>d+=c);process.stdin.on('end',()=>{try{const i=JSON.parse(d);const cmd=i.tool_input?.command||'';if(/git push/.test(cmd)){console.error('[Hook] Review changes before push')}}catch{}console.log(d)})\""
+          }
+        ],
+        "description": "Warn before git push"
+      },
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node ~/.claude/skills/strategic-compact/suggest-compact.js"
+          }
+        ],
+        "description": "Suggest compaction at logical intervals"
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node -e \"let d='';process.stdin.on('data',c=>d+=c);process.stdin.on('end',()=>{try{const i=JSON.parse(d);const cmd=i.tool_input?.command||'';if(/gh pr create/.test(cmd)){const m=i.tool_output?.stdout?.match(/https:\\/\\/github.com[^\\\\s]+/);if(m)console.error('[Hook] PR created: '+m[0])}}catch{}console.log(d)})\""
+          }
+        ],
+        "description": "Log PR URL after creation"
+      }
+    ]
+  }
+}
