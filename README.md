@@ -16,13 +16,25 @@ These configurations control AI agent behavior including progressive autonomy ti
 
 ## Table of Contents
 
+- [Customization](#customization)
 - [Overview](#overview)
 - [Structure](#structure)
 - [Installation](#installation)
 - [Shell Aliases](#shell-aliases)
 - [Token Budget](#token-budget)
-- [Customization](#customization)
 - [Sources](#sources)
+
+---
+
+## Customization
+
+**Add a language**: Create `rules/<language>/coding-style.md` and `rules/<language>/testing.md`. Optionally add a `skills/<language>-patterns/skill.md` for reference material.
+
+**Add a skill**: Create a directory under `skills/` with a `skill.md` file. Skills are loaded only when Claude needs them, so size is less constrained than rules.
+
+**Add a project template**: Create a file under `templates/`. Keep to 200-400 tokens. State constraints and preferred approaches; let skills handle implementation details.
+
+**Adjust autonomy**: Edit `settings.json` to add tools to `allowedTools` as trust builds. See the progressive autonomy strategy in [PLAN.md](PLAN.md).
 
 ---
 
@@ -148,18 +160,6 @@ Total 200k context window allocation with all rules loaded:
 | Auto-compact reserve | ~45,000 | ~22.5% |
 
 Skills load on demand and cost 0 tokens until invoked. Compare to loading a monolithic config: easily 8-10k tokens of static overhead before you type anything.
-
----
-
-## Customization
-
-**Add a language**: Create `rules/<language>/coding-style.md` and `rules/<language>/testing.md`. Optionally add a `skills/<language>-patterns/skill.md` for reference material.
-
-**Add a skill**: Create a directory under `skills/` with a `skill.md` file. Skills are loaded only when Claude needs them, so size is less constrained than rules.
-
-**Add a project template**: Create a file under `templates/`. Keep to 200-400 tokens. State constraints and preferred approaches; let skills handle implementation details.
-
-**Adjust autonomy**: Edit `settings.json` to add tools to `allowedTools` as trust builds. See the progressive autonomy strategy in [PLAN.md](PLAN.md).
 
 ---
 
