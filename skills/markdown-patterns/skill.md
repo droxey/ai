@@ -1,6 +1,6 @@
 # Markdown Patterns
 
-Patterns for documentation, rules, skills, and project templates in this configuration.
+Patterns for documentation, rules, skills, and project templates in this configuration. CommonMark baseline; GFM extensions noted where used.
 
 ## Rule File Structure
 
@@ -23,7 +23,9 @@ No code blocks in rules. No headings beyond `#`. Rules say *what*; skills say *h
 
 Skills are on-demand reference material. Code examples welcome. Target 50-120 lines.
 
-```markdown
+Use 4+ backticks on the outer fence when nesting code blocks inside markdown examples:
+
+````markdown
 # [Skill Name]
 
 One-line description of what this skill covers.
@@ -32,15 +34,17 @@ One-line description of what this skill covers.
 
 Explanation paragraph.
 
-\```language
+```language
 // code example
-\```
+```
 
 ## Another Section
 
 - Bullet points for guidelines
 - Tables for comparison data
-```
+````
+
+For deeper nesting (a skill showing how to write a skill that contains code), increase the outer fence to 5+ backticks. Each nesting level adds one backtick to the wrapper.
 
 ## Project Template Structure
 
@@ -70,7 +74,9 @@ Brief layout: entry-point -> internal -> shared
 [Project-specific context]
 ```
 
-## Tables
+## Tables (GFM)
+
+Tables are a GFM extension. Not rendered in strict CommonMark parsers.
 
 ```markdown
 | Header 1 | Header 2 | Header 3 |
@@ -81,21 +87,25 @@ Brief layout: entry-point -> internal -> shared
 
 Align columns for source readability. Use tables for structured comparisons, audit findings, and token budgets.
 
-## Collapsible Sections
+## Collapsible Sections (HTML)
 
-```markdown
+Not markdown -- raw HTML. Works on GitHub, most renderers, and Claude Code output. Use when the content is optional or verbose.
+
+```html
 <details>
 <summary>Click to expand</summary>
 
-Long content that doesn't need to be visible by default.
-Useful for verbose logs, full configs, or optional context.
+Long content here. Blank line after summary tag is required for
+markdown rendering inside the details block.
 
 </details>
 ```
 
 Use sparingly. Prefer concise content over hidden content.
 
-## Admonitions (GitHub-Flavored)
+## Admonitions (GFM-Only)
+
+GitHub-specific syntax. Renders as styled callout boxes on GitHub. Falls back to plain blockquotes elsewhere.
 
 ```markdown
 > [!NOTE]
@@ -103,12 +113,9 @@ Use sparingly. Prefer concise content over hidden content.
 
 > [!WARNING]
 > Critical information about potential pitfalls or breaking changes.
-
-> [!TIP]
-> Optional advice for better results.
 ```
 
-Supported in GitHub: `NOTE`, `TIP`, `IMPORTANT`, `WARNING`, `CAUTION`.
+Supported types: `NOTE`, `TIP`, `IMPORTANT`, `WARNING`, `CAUTION`. Not part of CommonMark.
 
 ## Link Patterns
 
@@ -122,14 +129,16 @@ The [research][autonomy] shows that [effective oversight][autonomy] improves out
 [autonomy]: https://anthropic.com/research/measuring-agent-autonomy
 ```
 
-## Badge Patterns
+## Nested Fences
 
-```markdown
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![CI](https://github.com/org/repo/actions/workflows/ci.yml/badge.svg)](https://github.com/org/repo/actions)
-```
+The key rule: outer fence must use strictly more backticks than any inner fence.
 
-Use badges in README.md only. Keep to 3-5 maximum. Order: license, CI status, version, coverage.
+- 3 backticks for code with no inner fences (most cases)
+- 4 backticks when wrapping markdown that contains 3-backtick blocks
+- 5 backticks when wrapping examples that themselves contain 4-backtick blocks
+- Tildes (`~~~`) also work but mixing fence styles reduces readability
+
+This matters most in skills that document other skills or show markdown templates containing code examples.
 
 ## Token-Efficient Writing
 
