@@ -73,10 +73,17 @@ rules/                             # Layer 2: Auto-loaded rules (~2,500 tokens)
   python/
     coding-style.md                #   Type hints, ruff, pathlib
     testing.md                     #   pytest, Factory Boy, DRF patterns
+  bash/
+    coding-style.md                #   set -euo pipefail, shellcheck, quoting
+    testing.md                     #   bats-core, fixtures, exit codes
+  markdown/
+    coding-style.md                #   ATX headings, fenced blocks, markdownlint
   node/
     coding-style.md                #   ES modules, async/await, zod
     testing.md                     #   vitest, msw, hook script testing
 skills/                            # Layer 3: On-demand skills (0 tokens until invoked)
+  bash-patterns/skill.md           #   Script templates, arg parsing, process mgmt
+  markdown-patterns/skill.md       #   Rule/skill/template structure, token writing
   security-review/skill.md         #   Security audit workflow + checklist
   docker-patterns/skill.md         #   Multi-stage builds, Compose, Swarm
   golang-patterns/skill.md         #   Go idioms, DI, graceful shutdown
@@ -154,9 +161,9 @@ Total 200k context window allocation with all rules loaded:
 |-----------|--------|---|
 | System prompt | ~10,000 | 5% |
 | Global CLAUDE.md | ~450 | 0.2% |
-| Rules (all loaded) | ~2,500 | 1.25% |
-| **Static overhead** | **~12,950** | **~6.5%** |
-| **Available for work** | **~142,050** | **~71%** |
+| Rules (all loaded) | ~3,200 | 1.6% |
+| **Static overhead** | **~13,650** | **~6.8%** |
+| **Available for work** | **~141,350** | **~71%** |
 | Auto-compact reserve | ~45,000 | ~22.5% |
 
 Skills load on demand and cost 0 tokens until invoked. Compare to loading a monolithic config: easily 8-10k tokens of static overhead before you type anything.

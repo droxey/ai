@@ -16,7 +16,7 @@ Your 200k context budget breaks down roughly as:
 | ---------------------------- | ------------------ | ---------- |
 | System prompt + tools        | ~18k (10k patched) | 5-9%       |
 | CLAUDE.md (global + project) | Target ≤2k         | ~1%        |
-| Rules (auto-loaded)          | Target ≤3k (~2.5k) | ~1.25%     |
+| Rules (auto-loaded)          | Target ≤4k (~3.2k) | ~1.6%      |
 | Skills (on-demand)           | 0 until invoked    | 0%         |
 | Auto-compact reserve         | 45k                | 22.5%      |
 | **Usable working context**   | **~130-145k**      | **65-72%** |
@@ -75,9 +75,14 @@ Rules auto-load per session. Organize into common + language-specific. Only inst
 │   ├── git-workflow.md    # Conventional commits, draft PRs
 │   ├── testing.md         # TDD cycle, coverage targets
 │   └── docker.md          # Compose, Swarm, CapRover
+├── bash/
+│   ├── coding-style.md    # set -euo pipefail, shellcheck, quoting
+│   └── testing.md         # bats-core, fixtures, exit codes
 ├── golang/
 │   ├── coding-style.md    # Effective Go, error wrapping, no init()
 │   └── testing.md         # Table-driven tests, testcontainers
+├── markdown/
+│   └── coding-style.md    # ATX headings, fenced blocks, markdownlint
 ├── python/
 │   ├── coding-style.md    # Type hints, ruff, pathlib
 │   └── testing.md         # pytest, Factory Boy, DRF test patterns
@@ -127,10 +132,12 @@ One small rule file for your Docker/DevOps context:
 | common/git-workflow.md | ~250       |
 | common/testing.md      | ~300       |
 | common/docker.md       | ~150       |
+| bash/ (2 files)        | ~450       |
 | golang/ (2 files)      | ~500       |
+| markdown/ (1 file)     | ~250       |
 | python/ (2 files)      | ~500       |
 | node/ (2 files)        | ~400       |
-| **Total**              | **~2,500** |
+| **Total**              | **~3,200** |
 
 -----
 
@@ -142,10 +149,12 @@ Skills load on-demand. This is where you put the heavy reference material. From 
 
 | Skill                  | Source        | Why                                       |
 | ---------------------- | ------------- | ----------------------------------------- |
+| `bash-patterns/`       | Custom        | Script templates, arg parsing, process mgmt |
 | `security-review/`     | everything-cc | Your security auditing workflow            |
 | `docker-patterns/`     | everything-cc | Compose, Swarm, networking patterns        |
 | `golang-patterns/`     | everything-cc | Go idioms, clean architecture              |
 | `golang-testing/`      | everything-cc | Table-driven tests, testcontainers, mocks  |
+| `markdown-patterns/`   | Custom        | Rule/skill/template structure, token writing |
 | `python-patterns/`     | everything-cc | Django service layer, DRF patterns         |
 | `python-testing/`      | everything-cc | pytest, Factory Boy, fixtures              |
 | `django-patterns/`     | everything-cc | DRF ViewSets, serializers, signals         |
@@ -447,9 +456,9 @@ Output: findings table with severity, location, recommendation.
 | ------------------------- | ------------------ |
 | System prompt (patched)   | ~10,000            |
 | Global CLAUDE.md          | ~450               |
-| Rules (all loaded)        | ~2,500             |
-| **Total static overhead** | **~12,950**        |
-| **Remaining for work**    | **~142,050 (71%)** |
+| Rules (all loaded)        | ~3,200             |
+| **Total static overhead** | **~13,650**        |
+| **Remaining for work**    | **~141,350 (71%)** |
 
 Compare to loading everything-cc's full user-CLAUDE.md + all rules + all agents: easily 8-10k tokens before you type anything. This plan saves ~5-7k tokens of static overhead.
 
