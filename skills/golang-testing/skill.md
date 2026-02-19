@@ -129,9 +129,64 @@ func TestRenderTemplate(t *testing.T) {
 }
 ```
 
+## Property-Based Tests (Rapid)
+
+```go
+import "pgregory.net/rapid"
+
+func TestParseConfigRoundTrip(t *testing.T) {
+    rapid.Check(t, func(t *rapid.T) {
+        port := rapid.IntRange(1, 65535).Draw(t, "port")
+        host := rapid.StringMatching(`[a-z]{1,20}`).Draw(t, "host")
+
+        cfg := &Config{Port: port, Host: host}
+        data, err := cfg.Marshal()
+        require.NoError(t, err)
+
+        parsed, err := ParseConfig(data)
+        require.NoError(t, err)
+        assert.Equal(t, cfg, parsed)
+    })
+}
+
+func TestNormalizePath(t *testing.T) {
+    rapid.Check(t, func(t *rapid.T) {
+        path := rapid.String().Draw(t, "path")
+        result := NormalizePath(path)
+        assert.NotEmpty(t, result)
+    })
+}
+```
+
+Use `rapid` for round-trip properties, idempotency checks, and functions that must be total (never panic). Prefer over `testing/quick` for better shrinking and generation.
+
+## Benchmark Tests
+
+```go
+func BenchmarkParseConfig(b *testing.B) {
+    input := mustReadFixture(b, "large-config.yaml")
+    b.ResetTimer()
+    for i := 0; i < b.N; i++ {
+        ParseConfig(input)
+    }
+}
+
+func BenchmarkGetUser(b *testing.B) {
+    db := setupPostgres(b)
+    seedUsers(b, db, 1000)
+    b.ResetTimer()
+    for i := 0; i < b.N; i++ {
+        GetUserByID(db, "test-id-500")
+    }
+}
+```
+
+Run `go test -bench=. -benchmem ./...` in CI. Compare against baselines with `benchstat`.
+
 ## Conventions
 
 - `testdata/` directory for fixtures, golden files, and test configs.
 - `_test.go` suffix. `_integration_test.go` with build tag for slow tests.
 - `go test -race -count=1 -timeout=60s ./...` as CI command.
+- `go test -bench=. -benchmem ./...` for performance regression checks.
 - Use `require` for preconditions (fail fast), `assert` for verifications (collect all).

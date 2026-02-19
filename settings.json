@@ -24,7 +24,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node -e \"let d='';process.stdin.on('data',c=>d+=c);process.stdin.on('end',()=>{try{const i=JSON.parse(d);const cmd=i.tool_input?.command||'';if(/git push/.test(cmd)){console.error('[Hook] Review changes before push')}}catch{}console.log(d)})\""
+            "command": "node ~/.claude/hooks/warn-git-push.mjs"
           }
         ],
         "description": "Warn before git push"
@@ -34,7 +34,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node ~/.claude/skills/strategic-compact/suggest-compact.js"
+            "command": "node ~/.claude/hooks/suggest-compact.mjs"
           }
         ],
         "description": "Suggest compaction at logical intervals"
@@ -46,7 +46,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node -e \"let d='';process.stdin.on('data',c=>d+=c);process.stdin.on('end',()=>{try{const i=JSON.parse(d);const cmd=i.tool_input?.command||'';if(/gh pr create/.test(cmd)){const m=i.tool_output?.stdout?.match(/https:\\/\\/github.com[^\\\\s]+/);if(m)console.error('[Hook] PR created: '+m[0])}}catch{}console.log(d)})\""
+            "command": "node ~/.claude/hooks/log-pr-url.mjs"
           }
         ],
         "description": "Log PR URL after creation"

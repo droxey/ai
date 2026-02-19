@@ -11,3 +11,6 @@
 - `pytest -x --tb=short` for fast failure feedback during development.
 - `pytest --cov=apps -x` as the standard test command. Stop on first failure.
 - Separate test directories mirror source structure: `tests/unit/`, `tests/integration/`.
+- `hypothesis` for property-based tests on serializers, string processing, and total functions.
+- Test Celery tasks with `task.apply()` (sync). Reserve `task.delay()` for integration tests.
+- Validate API responses against OpenAPI schema with `drf-spectacular` + `openapi-spec-validator`.

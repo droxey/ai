@@ -10,3 +10,5 @@
 - Test error paths explicitly. Verify error wrapping with `errors.Is` and `errors.As`.
 - No `time.Sleep` in tests. Use channels, `t.Deadline()`, or `testify/assert.Eventually`.
 - `go test -race -count=1 ./...` as the standard test command. Always race-detect.
+- `pgregory.net/rapid` for property-based tests. Prefer over `testing/quick` for better shrinking.
+- `go test -bench=. -benchmem ./...` for performance regressions. Compare with `benchstat`.

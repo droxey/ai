@@ -9,3 +9,6 @@
 - Tests must be deterministic. No sleeping, no time-dependent assertions, no network calls in unit tests.
 - Run the full suite before pushing. CI is a safety net, not the first line of defense.
 - Flaky tests are bugs. Fix or delete them immediately.
+- Use property-based tests (`hypothesis`, `rapid`) for functions that must handle arbitrary input.
+- Run `pip-audit` / `govulncheck` in CI. Block merges on critical vulnerabilities.
+- Benchmark critical paths. Detect performance regressions with `go test -bench` or `pytest-benchmark`.

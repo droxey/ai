@@ -95,6 +95,39 @@ Cursor pagination over offset pagination for large datasets. Stable results unde
 - Test migrations in CI: `python manage.py migrate` on a fresh database.
 - Never edit a migration that's been deployed. Create a new one.
 
+### Testing Data Migrations
+
+```python
+from django.test import TestCase
+from django.core.management import call_command
+
+class TestDataMigrations(TestCase):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        call_command("migrate", "users", "0005_previous_migration", verbosity=0)
+
+    def test_forward_migration_populates_field(self):
+        from django.db import connection
+        with connection.cursor() as cursor:
+            cursor.execute(
+                "INSERT INTO users_user (id, email) VALUES (%s, %s)",
+                ["test-id", "test@example.com"],
+            )
+
+        call_command("migrate", "users", "0006_populate_display_name", verbosity=0)
+
+        from apps.users.models import User
+        user = User.objects.get(pk="test-id")
+        assert user.display_name == "test@example.com"
+
+    def test_reverse_migration(self):
+        call_command("migrate", "users", "0006_populate_display_name", verbosity=0)
+        call_command("migrate", "users", "0005_previous_migration", verbosity=0)
+```
+
+Test data migrations against realistic data shapes. Always test reversibility. Run `python manage.py migrate && python manage.py migrate zero` in CI to verify full forward/backward compatibility.
+
 ## Management Commands
 
 ```python
